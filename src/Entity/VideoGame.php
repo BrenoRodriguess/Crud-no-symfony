@@ -81,4 +81,5 @@ class VideoGame implements \JsonSerializable
             "updatedAt" => $this->getUpdatedAt()
         ];
     }
+
 }

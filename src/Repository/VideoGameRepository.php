@@ -25,18 +25,6 @@ class VideoGameRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(VideoGame $entity, bool $flush = true): void
-    {
-        $this->_em->persist($entity);
-        if ($flush) {
-            $this->_em->flush();
-        }
-    }
-
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function remove(VideoGame $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
@@ -45,6 +33,17 @@ class VideoGameRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * 
+     */
+    public function persist(VideoGame $entity)
+    {
+        $em = $this->getEntityManager();
+        $em->beginTransaction();
+        $em->persist($entity);
+        $em->commit();
+        $em->flush();
+    }
     // /**
     //  * @return VideoGame[] Returns an array of VideoGame objects
     //  */
