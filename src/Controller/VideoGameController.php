@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\VideoGame;
+use App\Form\Type\VideoGameType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,35 @@ use App\Repository\VideoGameRepository;
 
 class VideoGameController extends AbstractController
 {
+    /**
+     * @Route("/pagina", name="_pagina", methods={"GET", "POST"})
+     */
+    public function pagina(Request $request )
+    {
+        // just set up a fresh $task object (remove the example data)
+        $VideoGame = new VideoGame();
+
+        $form = $this->createForm(VideoGameType::class, $VideoGame);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $VideoGame = $form->getData();
+            return $this->redirectToRoute('video_game_show');
+        }
+
+
+        return $this->render("paginagame.html.twig", ['abacaxi'=>$form->createView()]);
+    }
+    /**
+     * @Route("/show", name="_show", methods={"GET", "POST"})
+     */
+    public function showPagina(Request $request, VideoGameRepository $videoGameRepository)
+    {
+        $all = $videoGameRepository->findAll();
+
+
+        return $this->render('show.html.twig',['videogames'=>$all]);
+    }
     /**
      * @Route("/create", name="_create", methods={"POST"})
      */

@@ -6,29 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario</title>
 </head>
-<style>
-    table, th, td {
-        border:1px solid black;
-    }
-</style>
 <body>
 <h1>Primeiro formulário</h1>
 
 <p>Aprendendo a Desenvolver back-end</p>
 
-<table style="width:40%">
-    <thead>
-    <tr>
-        <th>Tabela</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for videogame in videogames %}
-    <tr>
-            <td>{{ videogame.name }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{{ form(abacaxi) }}
 </body>
 </html>
