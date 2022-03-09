@@ -2,84 +2,85 @@
 
 namespace App\Entity;
 
-use App\Repository\VideoGameRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=VideoGameRepository::class)
+ * VideoGame
+ *
+ * @ORM\Table(name="video_game")
+ * @ORM\Entity
  */
-class VideoGame implements \JsonSerializable
+class VideoGame
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    public $name;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $created_at;
+    public $createdAt;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
-    private $updated_at;
+    public $updatedAt;
 
-    public function getId(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity=Jogo::class, mappedBy="VideoGame")
+     */
+    private $jogos;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->jogos = new ArrayCollection();
     }
 
-    public function getName(): ?string
+    /**
+     * @return Collection<int, Jogo>
+     */
+    public function getJogos(): Collection
     {
-        return $this->name;
+        return $this->jogos;
     }
 
-    public function setName(string $name): self
+    public function addJogo(Jogo $jogo): self
     {
-        $this->name = $name;
+        if (!$this->jogos->contains($jogo)) {
+            $this->jogos[] = $jogo;
+            $jogo->setVideoGame($this);
+        }
 
         return $this;
     }
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function removeJogo(Jogo $jogo): self
     {
-        $this->created_at = $created_at;
+        if ($this->jogos->removeElement($jogo)) {
+            // set the owning side to null (unless already changed)
+            if ($jogo->getVideoGame() === $this) {
+                $jogo->setVideoGame(null);
+            }
+        }
 
         return $this;
     }
-
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-    public function jsonSerialize(): array
-    {
-        return[
-            "id" => $this->getId(),
-            "name" => $this->getName(),
-            "createdAt" => $this->getCreatedAt(),
-            "updatedAt" => $this->getUpdatedAt()
-        ];
-    }
-
 }

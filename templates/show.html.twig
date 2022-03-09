@@ -10,25 +10,30 @@
     table, th, td {
         border:1px solid black;
     }
+
 </style>
 <body>
-<h1>Primeiro formulário</h1>
+<h1>Tabela</h1>
 
-<p>Aprendendo a Desenvolver back-end</p>
+{% for videogame in videogames %}
 
-<table style="width:40%">
-    <thead>
-    <tr>
-        <th>Tabela</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for videogame in videogames %}
-    <tr>
-            <td>{{ videogame.name }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <table>
+        <thead>
+        {{ videogame.name }}
+        </thead>
+        <tbody>
+        <th>Nome</th>
+
+        {% for jogo in videogame.jogos %}
+            <tr>
+                <td>{{ jogo.nome }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endfor %}
+
 </body>
 </html>
